@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myyear.dao.CustomerDao">
+  <resultMap id="BaseResultMap" type="com.myyear.pojo.Customer">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
+    <result column="gmt_modifiy" jdbcType="TIMESTAMP" property="gmt_modifiy" />
+    <result column="is_delete" jdbcType="INTEGER" property="is_delete" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="account_number" jdbcType="VARCHAR" property="account_number" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="user_name" jdbcType="VARCHAR" property="user_name" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="birthady" jdbcType="DATE" property="birthady" />
+    <result column="photo" jdbcType="VARCHAR" property="photo" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="perfect_ratio" jdbcType="DECIMAL" property="perfect_ratio" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, gmt_create, gmt_modifiy, is_delete, status, account_number, password, user_name, 
+    sex, age, email, birthady, photo, city, perfect_ratio
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from my_customer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from my_customer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.myyear.pojo.Customer">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into my_customer (id, gmt_create, gmt_modifiy, 
+      is_delete, status, account_number, 
+      password, user_name, sex, 
+      age, email, birthady, 
+      photo, city, perfect_ratio
+      )
+    values (#{id,jdbcType=BIGINT}, #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modifiy,jdbcType=TIMESTAMP}, 
+      #{is_delete,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{account_number,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{age,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{birthady,jdbcType=DATE}, 
+      #{photo,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{perfect_ratio,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.myyear.pojo.Customer">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into my_customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
+      <if test="gmt_create != null">
+        gmt_create,
+      </if>
+      <if test="gmt_modifiy != null">
+        gmt_modifiy,
+      </if>
+      <if test="is_delete != null">
+        is_delete,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="account_number != null">
+        account_number,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="user_name != null">
+        user_name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="birthady != null">
+        birthady,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="perfect_ratio != null">
+        perfect_ratio,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=BIGINT},
+      <if test="gmt_create != null">
+        #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modifiy != null">
+        #{gmt_modifiy,jdbcType=TIMESTAMP},
+      </if>
+      <if test="is_delete != null">
+        #{is_delete,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="account_number != null">
+        #{account_number,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="user_name != null">
+        #{user_name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="birthady != null">
+        #{birthady,jdbcType=DATE},
+      </if>
+      <if test="photo != null">
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="perfect_ratio != null">
+        #{perfect_ratio,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.myyear.pojo.Customer">
+    update my_customer
+    <set>
+      <if test="gmt_create != null">
+        gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmt_modifiy != null">
+        gmt_modifiy = #{gmt_modifiy,jdbcType=TIMESTAMP},
+      </if>
+      <if test="is_delete != null">
+        is_delete = #{is_delete,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="account_number != null">
+        account_number = #{account_number,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="user_name != null">
+        user_name = #{user_name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="birthady != null">
+        birthady = #{birthady,jdbcType=DATE},
+      </if>
+      <if test="photo != null">
+        photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="perfect_ratio != null">
+        perfect_ratio = #{perfect_ratio,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.myyear.pojo.Customer">
+    update my_customer
+    set gmt_create = #{gmt_create,jdbcType=TIMESTAMP},
+      gmt_modifiy = #{gmt_modifiy,jdbcType=TIMESTAMP},
+      is_delete = #{is_delete,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      account_number = #{account_number,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      user_name = #{user_name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      birthady = #{birthady,jdbcType=DATE},
+      photo = #{photo,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      perfect_ratio = #{perfect_ratio,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 根据AccountNumber获取用户 -->
+  <select id="getCustomerByAccountNumber" resultMap="BaseResultMap">
+  	SELECT 
+	    *
+	FROM my_customer
+	WHERE account_number = #{account_number}
+  </select>
+  
+</mapper>
