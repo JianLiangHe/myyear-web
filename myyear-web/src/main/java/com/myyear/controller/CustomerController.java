@@ -1,5 +1,7 @@
 package com.myyear.controller;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.myyear.pojo.Customer;
 import com.myyear.service.LoginService;
+import com.myyear.service.RegisterService;
 import com.myyear.service.impl.LoginServiceImpl;
 import com.myyear.util.RtnResult;
 
@@ -29,8 +32,27 @@ public class CustomerController {
 	@Autowired
 	private LoginService loginService;
 	
+	@Autowired
+	private RegisterService registerService;
+	
+	@ApiOperation(value = "注册")
+	@RequestMapping(value = "register", method = RequestMethod.POST)
+	public RtnResult register(
+			@ApiParam(value = "账号", required = true) @RequestParam(value = "account_number", required = true) String account_number,
+			@ApiParam(value = "密码", required = true) @RequestParam(value = "password", required = true) String password, 
+			@ApiParam(value = "用户名称", required = true) @RequestParam(value = "user_name", required = true) String user_name,
+			@ApiParam(value = "性别(0:女, 1:男)", required = true) @RequestParam(value = "sex", required = true) int sex,
+			@ApiParam(value = "出生日期", required = false) @RequestParam(value = "birthady", required = false) Date birthady,
+			@ApiParam(value = "邮箱", required = false) @RequestParam(value = "email", required = false) String email,
+			@ApiParam(value = "头像", required = false) @RequestParam(value = "photo", required = false) String photo,
+			@ApiParam(value = "城市", required = false) @RequestParam(value = "city", required = false) String city
+	) {
+		Customer customer = new Customer(account_number, password, user_name, sex, email, birthady, photo, city);
+		return registerService.register(customer);
+	}
+	
 	@ApiOperation(value = "登陆")
-	@RequestMapping(value = "login", method = RequestMethod.GET)
+	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public RtnResult login(
 			@ApiParam(value = "账号", required = true) @RequestParam(value = "account_number", required = true) String account_number,
 			@ApiParam(value = "密码", required = true) @RequestParam(value = "password", required = true) String password
