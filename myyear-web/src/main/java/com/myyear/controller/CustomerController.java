@@ -2,11 +2,8 @@ package com.myyear.controller;
 
 import java.util.Date;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.myyear.pojo.Customer;
 import com.myyear.service.LoginService;
 import com.myyear.service.RegisterService;
-import com.myyear.service.impl.LoginServiceImpl;
+import com.myyear.util.MD5Util;
 import com.myyear.util.RtnResult;
 
 import io.swagger.annotations.Api;
@@ -59,8 +56,10 @@ public class CustomerController {
 	) {
 		Customer customer = new Customer();
 		customer.setAccount_number(account_number);
-		customer.setPassword(password);
+		customer.setPassword(MD5Util.string2MD5(password));
 		return loginService.login(customer);
 	}
 
+	//public RtnResult update
+	
 }

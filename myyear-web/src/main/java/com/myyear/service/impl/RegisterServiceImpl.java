@@ -50,7 +50,7 @@ public class RegisterServiceImpl implements RegisterService {
 			// 3, 新增用户
 			
 			// 密码加密
-			//customer.setPassword(MD5Util.string2MD5(customer.getPassword()));
+			customer.setPassword(MD5Util.string2MD5(customer.getPassword()));
 			customerDao.insertSelective(customer);
 			return new RtnResult(WebUtils.SUCCESS_RESULT, WebUtils.SUCCESS_STATUS, WebUtils.SUCCESS_MESSAGE, customer);
 		} catch (Exception e) {
