@@ -26,7 +26,7 @@ public class Customer {
 
     private String email;
 
-    private Date birthady;
+    private Date birthday;
 
     private String photo;
 
@@ -34,38 +34,7 @@ public class Customer {
 
     private BigDecimal perfect_ratio;
 
-    public Customer() {
-		super();
-	}
-
-	public Customer(String account_number, String password, String user_name, Integer sex, String email, Date birthady,
-			String photo, String city) {
-		super();
-		this.account_number = account_number;
-		this.password = password;
-		this.user_name = user_name;
-		this.sex = sex;
-		this.email = email;
-		this.birthady = birthady;
-		this.photo = photo;
-		this.city = city;
-	}
-
-	public Customer(String account_number, String password, String user_name, Integer sex, Integer age, String email,
-			Date birthady, String photo, String city) {
-		super();
-		this.account_number = account_number;
-		this.password = password;
-		this.user_name = user_name;
-		this.sex = sex;
-		this.age = age;
-		this.email = email;
-		this.birthady = birthady;
-		this.photo = photo;
-		this.city = city;
-	}
-
-	public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -153,12 +122,12 @@ public class Customer {
         this.email = email == null ? null : email.trim();
     }
 
-    public Date getBirthady() {
-        return birthady;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setBirthady(Date birthady) {
-        this.birthady = birthady;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public String getPhoto() {

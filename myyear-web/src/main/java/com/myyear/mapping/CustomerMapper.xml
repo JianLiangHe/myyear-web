@@ -13,14 +13,14 @@
     <result column="sex" jdbcType="INTEGER" property="sex" />
     <result column="age" jdbcType="INTEGER" property="age" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="birthady" jdbcType="DATE" property="birthady" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
     <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="perfect_ratio" jdbcType="DECIMAL" property="perfect_ratio" />
   </resultMap>
   <sql id="Base_Column_List">
     id, gmt_create, gmt_modifiy, is_delete, status, account_number, password, user_name, 
-    sex, age, email, birthady, photo, city, perfect_ratio
+    sex, age, email, birthday, photo, city, perfect_ratio
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -33,24 +33,24 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.myyear.pojo.Customer">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into my_customer (id, gmt_create, gmt_modifiy, 
       is_delete, status, account_number, 
       password, user_name, sex, 
-      age, email, birthady, 
+      age, email, birthday, 
       photo, city, perfect_ratio
       )
     values (#{id,jdbcType=BIGINT}, #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modifiy,jdbcType=TIMESTAMP}, 
       #{is_delete,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{account_number,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
-      #{age,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{birthady,jdbcType=DATE}, 
+      #{age,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
       #{photo,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{perfect_ratio,jdbcType=DECIMAL}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.myyear.pojo.Customer">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into my_customer
@@ -86,8 +86,8 @@
       <if test="email != null">
         email,
       </if>
-      <if test="birthady != null">
-        birthady,
+      <if test="birthday != null">
+        birthday,
       </if>
       <if test="photo != null">
         photo,
@@ -131,8 +131,8 @@
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
       </if>
-      <if test="birthady != null">
-        #{birthady,jdbcType=DATE},
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
       </if>
       <if test="photo != null">
         #{photo,jdbcType=VARCHAR},
@@ -178,8 +178,8 @@
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
       </if>
-      <if test="birthady != null">
-        birthady = #{birthady,jdbcType=DATE},
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
       </if>
       <if test="photo != null">
         photo = #{photo,jdbcType=VARCHAR},
@@ -205,7 +205,7 @@
       sex = #{sex,jdbcType=INTEGER},
       age = #{age,jdbcType=INTEGER},
       email = #{email,jdbcType=VARCHAR},
-      birthady = #{birthady,jdbcType=DATE},
+      birthday = #{birthday,jdbcType=DATE},
       photo = #{photo,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       perfect_ratio = #{perfect_ratio,jdbcType=DECIMAL}
@@ -219,5 +219,47 @@
 	FROM my_customer
 	WHERE account_number = #{account_number}
   </select>
+  
+  <!-- 更新指定id的资料完整度 -->
+  <update id="updateCustomerPerfectRatio">
+  	UPDATE 
+  		my_customer customer,
+		(
+		    SELECT 
+		        id,
+		        (
+				    IF(IFNULL(email, '') = '', 0, 1) +
+				    IF(IFNULL(birthday, '') = '', 0, 1) +
+				    IF(IFNULL(photo, '') = '', 0, 1) +
+				    IF(IFNULL(city, '') = '', 0, 1) +
+				    IF(IFNULL(sex, '') = '', 0, 1)
+		        ) / 5 * 100 AS perfect_ratio
+		    FROM my_customer
+		    WHERE id = #{id}
+		) customer2
+	SET customer.perfect_ratio = customer2.perfect_ratio
+	WHERE customer.id = #{id}
+	AND customer.id = customer2.id;
+  </update>
+  
+  <!-- 更新用户信息 -->
+  <update id="updateCustomerInfo">
+  	UPDATE my_customer
+  	SET 
+  		sex = #{customer.sex},
+  		birthday = #{customer.birthday},
+  		email = #{customer.email},
+  		photo = #{customer.photo},
+  		city = #{customer.city}
+  	WHERE id = #{customer.id}	
+  </update>
+  
+  <!-- 更新用户密码 -->
+  <update id="updateCustomerPassword">
+  	UPDATE my_customer
+  	SET 
+  		password = #{password}
+  	WHERE id = #{customer.id}
+  </update>
   
 </mapper>

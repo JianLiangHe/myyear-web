@@ -8,6 +8,7 @@ import com.myyear.dao.CustomerDao;
 import com.myyear.pojo.Customer;
 import com.myyear.service.CustomerService;
 import com.myyear.service.RegisterService;
+import com.myyear.util.DateUtil;
 import com.myyear.util.MD5Util;
 import com.myyear.util.RtnResult;
 import com.myyear.util.WebUtils;
@@ -49,14 +50,27 @@ public class RegisterServiceImpl implements RegisterService {
 		try {
 			// 3, 新增用户
 			
+			// 计算年龄
+			int age = DateUtil.getAge(customer.getBirthday());
+			customer.setAge(age);
+			
 			// 密码加密
 			customer.setPassword(MD5Util.string2MD5(customer.getPassword()));
 			customerDao.insertSelective(customer);
+			
+			try {
+				// 更新用户资料完整度
+				Long customerID = customer.getId();
+				customerService.updateCustomerPerfectRatio(customerID);
+			} catch (Exception e) {
+				LOGGER.error("更新用户资料完整度失败, id: " + customer.getId());
+			}
+
 			return new RtnResult(WebUtils.SUCCESS_RESULT, WebUtils.SUCCESS_STATUS, WebUtils.SUCCESS_MESSAGE, customer);
 		} catch (Exception e) {
+			LOGGER.error("注册用户失败.");
 			return new RtnResult(WebUtils.ERROR_RESULT, WebUtils.ERROR_STATUS, WebUtils.ERROR_MESSAGE);
 		}
-		
 	}
 
 }
