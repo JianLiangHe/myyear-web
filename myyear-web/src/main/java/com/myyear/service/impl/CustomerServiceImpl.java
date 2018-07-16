@@ -29,6 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CustomerDao customerDao;
 	
+	@Override
 	public boolean isCustomerByID(Long id) {
 		boolean flag = false;
 		
@@ -39,6 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 		return flag;
 	}
 
+	@Override
 	public boolean isCustomerByAccountNumber(String accountNumber) {
 		boolean flag = false;
 		
@@ -49,10 +51,12 @@ public class CustomerServiceImpl implements CustomerService {
 		return flag;
 	}
 
+	@Override
 	public void updateCustomerPerfectRatio(Long id) {
 		customerDao.updateCustomerPerfectRatio(id);
 	}
 
+	@Override
 	public RtnResult updateCustomerInfo(Customer customer) {
 		Long customerID = customer.getId();
 		
@@ -77,6 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
 
+	@Override
 	public RtnResult updateCustomerPassword(UpdateCustomerPasswordDto dto) {
 		boolean flag = false;
 		
